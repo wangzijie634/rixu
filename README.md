@@ -2,7 +2,23 @@
 
 一个将日程安排、常用信息和专注计时放在一起的个人效率工作台。
 
-![日序工作台预览](screenshots/workbench.png)
+## 工作台与壁纸玻璃
+
+开启壁纸后，背景保留原图色彩，玻璃卡片会折射壁纸；首页同时展示专注计时、每周节奏、日历和当天计划。
+
+![开启背景壁纸后的工作台与玻璃卡片](screenshots/workbench-wallpaper-glass.png)
+
+## 六套完整主题
+
+主题会同步调整画布、卡片、文字、控件和玻璃配色，可随时切换浅色与深色风格。
+
+![石墨红、冰川蓝、松庭绿、雾藤紫、钛灰青和午夜蓝六套主题对比](screenshots/theme-comparison.png)
+
+## 信息速取
+
+保存并分类常用片段，通过搜索、收藏筛选快速找到并复制需要的内容；壁纸和玻璃材质可与所选主题搭配。
+
+![开启背景壁纸后的信息片段、分类和快速复制界面](screenshots/information-snippets.png)
 
 ## 功能
 
@@ -40,6 +56,6 @@ npm test
 - `dist/`：工作台界面及静态资源。
 - `lib/`：图片存储逻辑。
 - `tests/`：逻辑和服务测试。
-- `screenshots/`：README 预览图。
+- `screenshots/`：工作台和功能展示图。
 
 第三方许可信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
