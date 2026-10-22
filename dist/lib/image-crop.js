@@ -25,6 +25,25 @@ export function zoomCropAt(state, zoom, anchorX = .5, anchorY = .5) {
   };
 }
 
+// Flips mirror the pixels inside the selected rectangle, so the frame stays in
+// place and the saved image keeps the same crop geometry.
+export function getCropOrientation({ flipX = false, flipY = false } = {}) {
+  return { scaleX: flipX ? -1 : 1, scaleY: flipY ? -1 : 1 };
+}
+
+function drawCrop(context, image, rect, width, height, orientation) {
+  const { scaleX, scaleY } = getCropOrientation(orientation);
+  if (scaleX > 0 && scaleY > 0) {
+    context.drawImage(image, rect.x, rect.y, rect.width, rect.height, 0, 0, width, height);
+    return;
+  }
+  context.save();
+  context.translate(scaleX < 0 ? width : 0, scaleY < 0 ? height : 0);
+  context.scale(scaleX, scaleY);
+  context.drawImage(image, rect.x, rect.y, rect.width, rect.height, 0, 0, width, height);
+  context.restore();
+}
+
 export function getCropOutputSize(rect, kind) {
   const longest = kind === 'cover' ? 1800 : 2560;
   const scale = Math.min(1, longest / Math.max(rect.width, rect.height));
@@ -44,7 +63,7 @@ async function decodeImage(file) {
   return bitmap;
 }
 
-async function exportImage(bitmap, rect, kind) {
+async function exportImage(bitmap, rect, kind, orientation) {
   const size = getCropOutputSize(rect, kind);
   const canvas = document.createElement('canvas');
   canvas.width = size.width;
@@ -54,7 +73,7 @@ async function exportImage(bitmap, rect, kind) {
   try {
     context.imageSmoothingEnabled = true;
     context.imageSmoothingQuality = 'high';
-    context.drawImage(bitmap, rect.x, rect.y, rect.width, rect.height, 0, 0, size.width, size.height);
+    drawCrop(context, bitmap, rect, size.width, size.height, orientation);
     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', .92));
     if (!blob || blob.type !== 'image/webp') throw new Error('此浏览器不支持保存 WebP 图片，请使用新版 Chrome 或 Edge。');
     return blob;
@@ -97,10 +116,11 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
     const context = canvas.getContext('2d');
     if (!context) throw new Error('浏览器无法预览图片，请更新浏览器后重试。');
     context.clearRect(0, 0, width, height);
-    context.drawImage(current.bitmap, rect.x, rect.y, rect.width, rect.height, 0, 0, width, height);
+    drawCrop(context, current.bitmap, rect, width, height, current.state);
     Object.assign(stage.dataset, {
       sourceWidth: String(current.bitmap.width), sourceHeight: String(current.bitmap.height),
       cropX: String(rect.x), cropY: String(rect.y), cropWidth: String(rect.width), cropHeight: String(rect.height),
+      flipX: String(Boolean(current.state.flipX)), flipY: String(Boolean(current.state.flipY)),
     });
     const range = $('#imageCropZoom');
     range.value = String(current.state.zoom);
@@ -108,12 +128,18 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
     $('#imageCropZoomValue').textContent = `${Math.round(current.state.zoom * 100)}%`;
     $('[data-crop-action="zoom-out"]').disabled = current.busy || current.state.zoom <= MIN_ZOOM;
     $('[data-crop-action="zoom-in"]').disabled = current.busy || current.state.zoom >= MAX_ZOOM;
+    $('[data-crop-action="flip-h"]').setAttribute('aria-pressed', String(Boolean(current.state.flipX)));
+    $('[data-crop-action="flip-v"]').setAttribute('aria-pressed', String(Boolean(current.state.flipY)));
     const size = getCropOutputSize(rect, current.kind);
     $('#imageCropOutput').textContent = `${size.width} × ${size.height} px`;
   }
   function reset() {
     if (!current || current.busy) return;
-    setState({ zoom: 1, centerX: current.bitmap.width / 2, centerY: current.bitmap.height / 2 });
+    setState({ zoom: 1, centerX: current.bitmap.width / 2, centerY: current.bitmap.height / 2, flipX: false, flipY: false });
+  }
+  function toggleFlip(axis) {
+    if (!current || current.busy) return;
+    setState(axis === 'vertical' ? { flipY: !current.state.flipY } : { flipX: !current.state.flipX });
   }
   function panImage(dx, dy) {
     const stage = $('#imageCropStage').getBoundingClientRect();
@@ -156,7 +182,7 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
     pointers.clear(); gesture = null;
     setBusy(true);
     try {
-      const blob = await exportImage(current.bitmap, getCropRect(current.state), current.kind);
+      const blob = await exportImage(current.bitmap, getCropRect(current.state), current.kind, current.state);
       await current.onSave(blob);
       setBusy(false);
       finish(true);
@@ -188,6 +214,8 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
     else if (action === 'right') panImage(24, 0);
     else if (action === 'up') panImage(0, -24);
     else if (action === 'down') panImage(0, 24);
+    else if (action === 'flip-h') toggleFlip('horizontal');
+    else if (action === 'flip-v') toggleFlip('vertical');
   });
   // Capture backdrop clicks before the app's shared dialog dismiss handler. A
   // save in progress must not leave the editor or accidentally discard the crop.
@@ -250,6 +278,8 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
     else if (event.key === '+' || event.key === '=') { event.preventDefault(); changeZoom(current.state.zoom + .1); }
     else if (event.key === '-') { event.preventDefault(); changeZoom(current.state.zoom - .1); }
     else if (event.key === 'Home') { event.preventDefault(); reset(); }
+    else if (event.key === 'h' || event.key === 'H') { event.preventDefault(); toggleFlip('horizontal'); }
+    else if (event.key === 'v' || event.key === 'V') { event.preventDefault(); toggleFlip('vertical'); }
   });
   window.addEventListener('resize', schedulePaint);
 
@@ -262,9 +292,9 @@ export function createImageCropEditor({ icon, dialog = document.querySelector('#
       finally { pending = false; }
       const ratio = Number.isFinite(aspect) && aspect > 0 ? aspect : 1;
       const title = kind === 'cover' ? '调整封面展示区域' : '调整壁纸展示区域';
-      dialog.innerHTML = `<div class="image-crop-heading"><div><h2 id="imageCropTitle">${title}</h2><p id="imageCropHelp">拖动图片选择位置，滚轮或滑条调整大小。</p></div><button class="icon-btn" data-crop-action="cancel" aria-label="取消图片编辑">${glyph('close')}</button></div><div class="image-crop-body"><div class="image-crop-stage-wrap"><div id="imageCropStage" class="image-crop-stage" style="--crop-aspect:${ratio}" tabindex="0" role="group" aria-label="图片展示区域，可用方向键移动，按加减键缩放" aria-describedby="imageCropHelp"><canvas aria-hidden="true"></canvas><span class="image-crop-guides" aria-hidden="true"></span></div></div><div class="image-crop-preview-note"><span>框内即为保存后的展示区域</span><output id="imageCropOutput"></output></div><div class="image-crop-zoom"><label for="imageCropZoom">缩放</label><button class="image-crop-step" data-crop-action="zoom-out" aria-label="缩小图片">−</button><input id="imageCropZoom" type="range" min="1" max="4" step="0.01" value="1"><button class="image-crop-step" data-crop-action="zoom-in" aria-label="放大图片">+</button><output id="imageCropZoomValue" for="imageCropZoom">100%</output></div><div class="image-crop-position"><span>移动图片</span><div class="image-crop-pan" role="group" aria-label="移动图片位置"><button class="image-crop-step" data-crop-action="left" aria-label="向左移动图片">${glyph('left')}</button><button class="image-crop-step" data-crop-action="right" aria-label="向右移动图片">${glyph('chevron')}</button><button class="image-crop-step crop-pan-up" data-crop-action="up" aria-label="向上移动图片">${glyph('left')}</button><button class="image-crop-step crop-pan-down" data-crop-action="down" aria-label="向下移动图片">${glyph('chevron')}</button></div><button class="text-btn" data-crop-action="reset">重置位置</button></div><p id="imageCropError" class="form-error" role="alert" tabindex="-1"></p><p id="imageCropStatus" class="image-crop-status" role="status" aria-live="polite"></p></div><div class="image-crop-footer"><button class="btn" data-crop-action="cancel">取消</button><button class="btn primary" data-crop-action="save">保存并应用</button></div>`;
+      dialog.innerHTML = `<div class="image-crop-heading"><div><h2 id="imageCropTitle">${title}</h2><p id="imageCropHelp">拖动图片选择位置，滚轮或滑条调整大小，按 H 或 V 翻转。</p></div><button class="icon-btn" data-crop-action="cancel" aria-label="取消图片编辑">${glyph('close')}</button></div><div class="image-crop-body"><div class="image-crop-stage-wrap"><div id="imageCropStage" class="image-crop-stage" style="--crop-aspect:${ratio}" tabindex="0" role="group" aria-label="图片展示区域，可用方向键移动，按加减键缩放，按 H 或 V 翻转" aria-describedby="imageCropHelp"><canvas aria-hidden="true"></canvas><span class="image-crop-guides" aria-hidden="true"></span></div></div><div class="image-crop-preview-note"><span>框内即为保存后的展示区域</span><output id="imageCropOutput"></output></div><div class="image-crop-zoom"><label for="imageCropZoom">缩放</label><button class="image-crop-step" data-crop-action="zoom-out" aria-label="缩小图片">−</button><input id="imageCropZoom" type="range" min="1" max="4" step="0.01" value="1"><button class="image-crop-step" data-crop-action="zoom-in" aria-label="放大图片">+</button><output id="imageCropZoomValue" for="imageCropZoom">100%</output></div><div class="image-crop-flip"><span>翻转</span><div class="image-crop-pan" role="group" aria-label="翻转图片"><button class="image-crop-step" data-crop-action="flip-h" aria-pressed="false" aria-label="水平翻转">${glyph('flip-x')}</button><button class="image-crop-step" data-crop-action="flip-v" aria-pressed="false" aria-label="上下翻转">${glyph('flip-y')}</button></div></div><div class="image-crop-position"><span>移动图片</span><div class="image-crop-pan" role="group" aria-label="移动图片位置"><button class="image-crop-step" data-crop-action="left" aria-label="向左移动图片">${glyph('left')}</button><button class="image-crop-step" data-crop-action="right" aria-label="向右移动图片">${glyph('chevron')}</button><button class="image-crop-step crop-pan-up" data-crop-action="up" aria-label="向上移动图片">${glyph('left')}</button><button class="image-crop-step crop-pan-down" data-crop-action="down" aria-label="向下移动图片">${glyph('chevron')}</button></div><button class="text-btn" data-crop-action="reset" aria-label="重置缩放、位置和翻转">重置</button></div><p id="imageCropError" class="form-error" role="alert" tabindex="-1"></p><p id="imageCropStatus" class="image-crop-status" role="status" aria-live="polite"></p></div><div class="image-crop-footer"><button class="btn" data-crop-action="cancel">取消</button><button class="btn primary" data-crop-action="save">保存并应用</button></div>`;
       return new Promise((resolve, reject) => {
-        current = { bitmap, kind, onSave, resolve, reject, busy: false, overflow: document.body.style.overflow, scrollbarGutter: document.documentElement.style.scrollbarGutter, scrollX: window.scrollX, scrollY: window.scrollY, state: { imageWidth: bitmap.width, imageHeight: bitmap.height, aspect: ratio, zoom: 1, centerX: bitmap.width / 2, centerY: bitmap.height / 2 } };
+        current = { bitmap, kind, onSave, resolve, reject, busy: false, overflow: document.body.style.overflow, scrollbarGutter: document.documentElement.style.scrollbarGutter, scrollX: window.scrollX, scrollY: window.scrollY, state: { imageWidth: bitmap.width, imageHeight: bitmap.height, aspect: ratio, zoom: 1, centerX: bitmap.width / 2, centerY: bitmap.height / 2, flipX: false, flipY: false } };
         try {
           onReady?.();
           document.documentElement.style.scrollbarGutter = 'stable';

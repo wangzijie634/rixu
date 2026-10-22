@@ -40,6 +40,8 @@ const paths = {
   pin:'m16 3 5 5-4 1-3 6-5-5 6-3zM9 15l-6 6',
   sun:'M12 3V1m0 22v-2M3 12H1m22 0h-2M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0',
   image:'M3 3h18v18H3zM3 16l6-6 4 4 3-3 5 5M8 7h.01',
+  'flip-x':'M12 2v20M9 6 3 12l6 6zM15 6l6 6-6 6z',
+  'flip-y':'M2 12h20M6 9l6-6 6 6zM6 15l6 6 6-6z',
   palette:'M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1.4-3.4 1 1 0 0 1 .7-1.7H18a4 4 0 0 0 4-4c0-5-4.5-8.9-10-8.9M7 11h.01M9 7h.01M14 6h.01M18 10h.01',
 };
 const icon = (name, cls = '') => `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name] || paths.file}"/></svg>`;

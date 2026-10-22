@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getCropRect, zoomCropAt, getCropOutputSize } from '../dist/lib/image-crop.js';
+import { getCropRect, zoomCropAt, getCropOutputSize, getCropOrientation } from '../dist/lib/image-crop.js';
 
 const near = (actual, expected, tolerance = 1e-7) => assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} ≈ ${expected}`);
 const withinImage = (rect, state) => {
@@ -47,6 +47,18 @@ test('zoom preserves the source point under the mouse or pinch anchor until an i
   near(zoomCropAt(state, 10).zoom, 4);
   near(zoomCropAt(state, -1).zoom, 1);
   near(getCropRect({ ...state, zoom: 2.2 }).width, getCropRect({ ...state, zoom: 1 }).width / 2.2);
+});
+
+test('flipping mirrors the visible pixels without moving the crop rectangle', () => {
+  const state = { imageWidth: 4000, imageHeight: 3000, aspect: 4 / 3, zoom: 2, centerX: 1400, centerY: 900 };
+  const before = getCropRect(state);
+  for (const flags of [{ flipX: true }, { flipY: true }, { flipX: true, flipY: true }]) {
+    assert.deepEqual(getCropRect({ ...state, ...flags }), before);
+  }
+  assert.deepEqual(getCropOrientation(), { scaleX: 1, scaleY: 1 });
+  assert.deepEqual(getCropOrientation({ flipX: true }), { scaleX: -1, scaleY: 1 });
+  assert.deepEqual(getCropOrientation({ flipY: true }), { scaleX: 1, scaleY: -1 });
+  assert.deepEqual(getCropOrientation({ flipX: true, flipY: true }), { scaleX: -1, scaleY: -1 });
 });
 
 test('export preserves the selected rectangle aspect, caps file dimensions and never upscales', () => {
