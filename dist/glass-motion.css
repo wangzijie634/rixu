@@ -1,0 +1,97 @@
+/* Glass identity plaque and bounded lift feedback. The wallpaper lens is
+   drawn by glass-optics.js; text and controls stay in normal DOM layers. */
+
+/* The brand gets the same optical surface as the large panels, at its
+   existing size. A local tint protects its short label on busy photographs. */
+:root:not([data-material="plain"]) .studio-brand {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .36);
+  background: rgba(var(--surface-rgb), .72);
+  color: var(--text);
+  text-shadow: none;
+  box-shadow: inset 0 .5px 1px rgba(255, 255, 255, .58), inset 0 -.5px 1px rgba(77, 103, 139, .17), 0 5px 13px -10px rgba(5, 20, 42, .5);
+}
+:root:not([data-material="plain"]) .studio-brand > :not(.glass-optics-canvas) {
+  position: relative;
+  z-index: 2;
+}
+:root:not([data-material="plain"]) .studio-brand::before,
+:root:not([data-material="plain"]) .studio-brand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+:root:not([data-material="plain"]) .studio-brand::before {
+  z-index: 1;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .24), transparent 47%, rgba(180, 212, 241, .1)), rgba(var(--surface-rgb), .48);
+}
+:root:not([data-material="plain"]) .studio-brand::after {
+  z-index: 3;
+  padding: 1.3px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  background:
+    linear-gradient(var(--glass-light-angle, 135deg), rgba(255, 255, 255, .88), rgba(255, 255, 255, .16) 21%, transparent 40%, rgba(255, 255, 255, .12) 57%, rgba(255, 255, 255, .72) 81%, rgba(255, 255, 255, .18)),
+    linear-gradient(calc(var(--glass-light-angle, 135deg) + 100deg), transparent 9%, var(--glass-line) 31%, transparent 48%, rgba(255, 255, 255, .36) 72%, transparent 93%);
+  background-blend-mode: screen, overlay;
+  box-shadow: inset 0 .5px 1px rgba(255, 255, 255, .42), inset 0 -.5px 1px var(--glass-shadow);
+}
+:root:not([data-material="plain"]) body.wallpaper-on .studio-brand.glass-optics-ready {
+  background: transparent;
+  color: var(--text);
+  text-shadow: none;
+  border-color: rgba(255, 255, 255, .36);
+}
+:root[data-theme-tone="dark"]:not([data-material="plain"]) .studio-brand {
+  border-color: rgba(181, 211, 250, .4);
+  box-shadow: inset 0 1px 1px rgba(218, 234, 255, .44), inset 0 -1px 1px rgba(4, 13, 29, .42), 0 5px 13px -10px rgba(0, 6, 19, .7);
+}
+:root[data-theme-tone="dark"]:not([data-material="plain"]) .studio-brand::before {
+  background: linear-gradient(160deg, rgba(221, 237, 255, .13), transparent 47%, rgba(113, 161, 222, .05)), rgba(var(--surface-rgb), .74);
+}
+
+/* Fine pointers can lift a module without moving its neighbours. The
+   expansion is smaller than half of the narrowest grid gap. */
+@media (hover: hover) and (pointer: fine) {
+  :is(.cover-card, .activity-card, .focus-card, .studio-calendar, .studio-agenda, .snippet-card) {
+    position: relative;
+    transform: translateY(0) scale(1);
+    transform-origin: center;
+    transition: transform 220ms cubic-bezier(.16, 1, .3, 1), box-shadow 220ms ease, border-color 160ms ease;
+  }
+  :is(.cover-card, .activity-card, .focus-card, .studio-calendar, .studio-agenda, .snippet-card):is(:hover, :focus-within) {
+    z-index: 3;
+    transform: translateY(-4px) scale(1.009);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--glass-shadow), 0 15px 24px -17px rgba(4, 16, 33, .5);
+  }
+}
+
+@media (max-width: 740px) {
+  :root:not([data-material="plain"]) .studio-brand {
+    min-height: 41px;
+    padding: 6px 11px 6px 8px;
+  }
+  .studio-brand > span > span { font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.cover-card, .activity-card, .focus-card, .studio-calendar, .studio-agenda, .snippet-card),
+  :is(.cover-card, .activity-card, .focus-card, .studio-calendar, .studio-agenda, .snippet-card):is(:hover, :focus-within) {
+    transform: none;
+    transition: border-color 100ms ease, box-shadow 100ms ease;
+  }
+  .rhythm-filled { transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root:not([data-material="plain"]) .studio-brand,
+  :root:not([data-material="plain"]) body.wallpaper-on .studio-brand.glass-optics-ready { background: var(--surface); color: var(--text); }
+  .studio-brand::before,
+  .studio-brand::after { display: none; }
+}

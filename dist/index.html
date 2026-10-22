@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef1f5">
+  <meta name="description" content="日序 Daymark，把每天的计划与常用信息放在一起。">
+  <title>日序 Daymark · 效率工作台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="./mark.svg">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./studio.css">
+  <link rel="stylesheet" href="./appearance.css">
+  <link rel="stylesheet" href="./appearance-panel.css">
+  <link rel="stylesheet" href="./glass-motion.css">
+  <link rel="stylesheet" href="./calendar-density.css">
+  <link rel="stylesheet" href="./image-crop.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="app" id="app">
+    <header class="studio-topbar">
+      <a class="studio-brand" href="#home"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 8h16v17H8zM8 13h16M12 5v6M20 5v6m-9 8 3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>日序<span>Daymark</span></span></a>
+      <nav class="studio-nav" aria-label="主导航"><a href="#home" data-route="home">工作台</a><a href="#planner" data-route="planner">日程计划</a><a href="#snippets" data-route="snippets">信息速取</a></nav>
+      <div class="studio-utilities"><button class="studio-search" data-action="search" aria-label="搜索工作台，Ctrl K"><span data-icon="search"></span><kbd>⌘ K</kbd></button><button class="studio-appearance" data-appearance-action="open" aria-label="外观、配色与壁纸" title="外观、配色与壁纸"><span data-icon="palette"></span></button><button class="studio-config" data-action="backup"><span data-icon="archive"></span><span>数据管理</span></button><button class="studio-avatar" data-action="help" aria-label="我的工作空间与使用帮助">我<span></span></button></div>
+    </header>
+    <aside class="sidebar" id="sidebar" aria-label="工作台导航">
+      <a class="brand" href="#home"><svg class="brand-mark" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M8 10h20v19H8z" stroke="currentColor" stroke-width="2"/><path d="M8 16h20M13 7v6M23 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m14 22 3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>日序<span class="brand-en">Daymark</span></span></a>
+      <div class="workspace-name"><span class="workspace-avatar">我</span><span>个人工作台<small>把时间留给重要的事</small></span><span class="tiny-dot" title="本地工作台"></span></div>
+      <button class="search-trigger" data-action="search"><span data-icon="search"></span><span>搜索工作台</span><kbd>Ctrl K</kbd></button>
+      <span class="nav-label">工作空间</span>
+      <nav class="main-nav">
+        <a href="#home" data-route="home"><span data-icon="home"></span><span>今日概览</span></a>
+        <a href="#planner" data-route="planner"><span data-icon="calendar"></span><span>日程计划</span><span class="nav-count" id="pendingCount"></span></a>
+        <a href="#snippets" data-route="snippets"><span data-icon="layers"></span><span>信息速取</span></a>
+
+      </nav>
+      <div class="sidebar-categories"><span class="nav-label">信息分类</span><div id="sidebarCategories"></div></div>
+      <div class="sidebar-bottom">
+        <button class="nav-utility" data-action="backup"><span data-icon="archive"></span>数据与备份</button>
+        <button class="nav-utility" data-action="help"><span data-icon="help"></span>使用帮助<span class="help-key">?</span></button>
+        <div class="storage-status" id="storageStatus"><span class="status-dot"></span><span>已保存到此浏览器</span></div>
+        <div class="profile"><span class="profile-avatar">我</span><div>我的空间<small>专注此刻，从容有序</small></div><span data-icon="chevrons"></span></div>
+      </div>
+    </aside>
+    <div class="mobile-top"><a class="brand" href="#home">日序<span class="brand-en">Daymark</span></a><button class="icon-btn" data-action="menu" aria-label="打开导航菜单"><span data-icon="menu"></span></button></div>
+    <main id="main" tabindex="-1"><div id="view"></div><footer class="page-footer"><span>一点点计划，多一点从容。</span><span>日序 Daymark <span class="footer-dot">·</span> 你的日常，有序发生</span></footer></main>
+  </div>
+  <dialog id="editorDialog" class="editor-dialog" aria-labelledby="editorTitle"><div id="editorContent"></div></dialog>
+  <dialog id="searchDialog" class="search-dialog" aria-labelledby="searchTitle"><div class="command-input"><span data-icon="search"></span><label class="sr-only" id="searchTitle" for="commandSearch">搜索任务和片段</label><input id="commandSearch" placeholder="搜索任务、常用文字、链接…" autocomplete="off"><button class="key-button" data-action="close-search">Esc</button></div><div id="commandResults"></div><div class="command-footer">输入关键词，快速找到你需要的内容</div></dialog>
+  <dialog id="utilityDialog" class="utility-dialog" aria-labelledby="utilityTitle"><div id="utilityContent"></div></dialog>
+  <dialog id="appearanceDialog" class="appearance-dialog" aria-labelledby="appearanceTitle"></dialog>
+  <dialog id="imageCropDialog" class="image-crop-dialog" aria-labelledby="imageCropTitle" aria-describedby="imageCropHelp"></dialog>
+  <input id="appearanceImageInput" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp" hidden>
+  <input id="importFile" type="file" accept=".json,.md,.markdown,.txt" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p>日序需要 JavaScript 才能保存任务和复制信息，请在浏览器中启用。</p></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

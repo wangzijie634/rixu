@@ -1,0 +1,224 @@
+/* Fill the calendar card with dates, rather than stretching the selection pill. */
+.studio-calendar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.studio-calendar .studio-card-head {
+  flex: none;
+  padding: 16px 20px 6px;
+}
+.studio-calendar .mini-calendar {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+  padding: 4px 17px 0;
+}
+.studio-calendar .month-heading {
+  flex: none;
+  min-height: 28px;
+  margin: 0 0 3px;
+  font-size: 12px;
+}
+.studio-calendar .month-heading .icon-btn {
+  width: 26px;
+  height: 26px;
+}
+.studio-calendar .calendar-grid {
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: 22px repeat(6, minmax(0, 1fr));
+  gap: 0 3px;
+  align-items: center;
+}
+.studio-calendar .day-label {
+  font-size: 11px;
+  line-height: 22px;
+}
+.studio-calendar .calendar-day {
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  align-self: center;
+  position: relative;
+  isolation: isolate;
+  container-type: size;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.studio-calendar .calendar-day::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(31px, 100cqh);
+  height: min(31px, 100cqh);
+  transform: translate(-50%, -50%);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: -1;
+}
+:root[data-theme] body .studio-calendar .calendar-grid .calendar-day:hover:not(.selected) {
+  background: transparent;
+}
+.studio-calendar .calendar-day:hover:not(.selected)::before {
+  background: var(--raised);
+}
+:root[data-theme] body .studio-calendar .calendar-grid .calendar-day.selected {
+  background: transparent;
+  color: var(--on-signal);
+  box-shadow: none;
+  font-weight: 600;
+  text-shadow: none;
+}
+:root[data-theme] body .studio-calendar .calendar-grid .calendar-day.selected::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
+}
+:root[data-theme] body .studio-calendar .calendar-grid .calendar-day.today:not(.selected) {
+  background: transparent;
+  color: var(--accent-ink);
+  text-decoration: none;
+  text-shadow: none;
+}
+:root[data-theme] body .studio-calendar .calendar-grid .calendar-day.today:not(.selected)::before {
+  background: var(--accent-pale);
+  border-color: var(--accent-soft);
+}
+.studio-calendar .calendar-day.has-task::after {
+  top: calc(50% + 10px);
+  bottom: auto;
+  width: 3px;
+  height: 3px;
+}
+.studio-calendar .calendar-day:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+body.wallpaper-on .studio-calendar.glass-optics-ready .mini-calendar::before {
+  inset: 0 11px;
+}
+.studio-calendar-foot {
+  flex: none;
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 20px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.studio-calendar-foot .icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+.studio-calendar-summary {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0 0 24px 24px;
+  text-align: left;
+  text-decoration: none;
+}
+.studio-calendar-summary > span { min-width: 0; }
+.calendar-summary-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.calendar-summary-copy strong { font-size: 12px; font-weight: 500; }
+.calendar-summary-copy small { font-size: 11px; font-weight: 400; }
+.studio-calendar-summary > .icon:last-child { margin-left: auto; }
+.studio-calendar-summary:hover { color: var(--accent-ink); }
+.studio-calendar-summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -7px;
+}
+body.wallpaper-on .studio-calendar.glass-optics-ready .studio-calendar-summary {
+  width: calc(100% - 22px);
+  min-height: 40px;
+  margin: 5px 11px 7px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--glass-ink);
+  text-shadow: var(--glass-type-shadow);
+}
+
+/* The sidebar calendar shares the compact selection shape. */
+.planner-sidebar .calendar-day.selected {
+  justify-self: center;
+  width: 28px;
+  max-width: 100%;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border-radius: 9px;
+  background: var(--accent);
+  color: var(--on-signal);
+}
+
+/* More snippets in view, while keeping every reading area wide enough. */
+.snippet-grid.full:not(.list) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+.snippet-grid.full:not(.list) > .snippet-card { grid-column: auto; }
+.snippet-grid.full:not(.list) .snippet-card { padding: 17px; }
+.snippet-grid.full:not(.list) .snippet-reading {
+  margin: 12px 0;
+  padding: 9px;
+  gap: 8px;
+}
+.snippet-grid.full:not(.list) .snippet-reading h3 {
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.snippet-grid.full:not(.list) .snippet-reading .snippet-content {
+  font-size: 12px;
+  line-height: 1.8;
+  min-height: 65px;
+  -webkit-line-clamp: 3;
+}
+.snippet-grid.full.list { grid-template-columns: minmax(0, 1fr); }
+
+@media (min-width: 700px) {
+  .snippet-grid.full:not(.list) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) {
+  .snippet-grid.full:not(.list) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) {
+  .snippet-grid.full:not(.list) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1700px) {
+  .snippet-grid.full:not(.list) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .studio-calendar .studio-card-head { padding-top: 17px; }
+  .studio-calendar .month-heading { font-size: 13px; }
+  .studio-calendar .calendar-day::before { width: min(32px, 100cqh); height: min(32px, 100cqh); }
+  .studio-calendar .day-label { font-size: 12px; }
+}
+@media (min-width: 2050px) {
+  .snippet-grid.full:not(.list) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+@media (max-width: 1000px) {
+  .studio-calendar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-calendar .calendar-day { transition: none; }
+}

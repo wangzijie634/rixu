@@ -1,0 +1,842 @@
+/* Appearance layer. Only the selected panels transmit the wallpaper.
+   The optical canvas refracts the image; text and controls remain separate. */
+:root,
+:root[data-theme="signal"] {
+  color-scheme: light;
+  --ground: #eef1f5;
+  --surface: #fcfcfc;
+  --surface-rgb: 252, 252, 252;
+  --surface-alt: #f6f8fb;
+  --raised: #e9edf2;
+  --text: #161922;
+  --muted: #5c6574;
+  --faint: #626b7a;
+  --border: #dce1e8;
+  --control: #7f8ca1;
+  --accent: #c20000;
+  --accent-ink: #960000;
+  --accent-pale: #f9eaea;
+  --accent-soft: #e5bbbb;
+  --on-signal: #ffffff;
+  --navy: #020d26;
+  --graphite: #161922;
+  --on-graphite: #ffffff;
+  --agenda-bg: #020d26;
+  --agenda-raised: #1d2a43;
+  --agenda-border: #2b3850;
+  --agenda-text: #f4f7fc;
+  --agenda-muted: #b1bdd2;
+  --category-bg: #eaf0f7;
+  --category-ink: #3b5271;
+  --timeline-bg: #eef2f8;
+  --timeline-hover: #e1e8f2;
+  --timeline-border: #ced8e6;
+  --timeline-ink: #253858;
+  --negative: #b42328;
+  --negative-pale: #fff0f1;
+  --warning: #8b3131;
+  --dial-track: #e5eaf1;
+  --dial-ticks: #a1adbf;
+  --glass-opacity: .88;
+  --glass-line: rgba(135, 155, 184, .37);
+  --glass-highlight: rgba(255, 255, 255, .98);
+  --glass-shadow: rgba(38, 58, 87, .08);
+  --glass-edge: rgba(126, 154, 192, .36);
+  --glass-cyan: rgba(131, 201, 221, .20);
+  --glass-violet: rgba(170, 161, 217, .19);
+  --toast-bg: #161922;
+  --toast-ink: #ffffff;
+  --toast-action: #ffbfc1;
+  --sidebar: var(--surface-alt);
+  --signal: var(--accent);
+  --theme-tone: light;
+  --secondary: #526f91;
+  --secondary-pale: #e6ecf4;
+  --glass-base-ink: #132032;
+  --glass-base-muted: #25364b;
+  --glass-base-tint: 252, 252, 252;
+  --glass-base-alpha: .22;
+  --glass-base-reading-alpha: .74;
+  --glass-base-type-shadow: 0 1px 2px rgba(255, 255, 255, .55);
+  --glass-smoke-rgb: 8, 17, 30;
+}
+
+:root[data-theme="cobalt"] {
+  --ground: #c9daed;
+  --surface: #dfebf8;
+  --surface-rgb: 223, 235, 248;
+  --surface-alt: #cfdfef;
+  --raised: #bbcee4;
+  --text: #172f51;
+  --muted: #3d5572;
+  --faint: #435a76;
+  --border: #a7bfd9;
+  --control: #607f9e;
+  --accent: #234f9b;
+  --accent-ink: #173e80;
+  --accent-pale: #bed2ef;
+  --accent-soft: #91afd8;
+  --graphite: #1c3c67;
+  --navy: #152f52;
+  --agenda-bg: #152f52;
+  --agenda-raised: #2b496c;
+  --agenda-border: #4a6484;
+  --agenda-text: #e7f2ff;
+  --agenda-muted: #b9d0eb;
+  --secondary: #226f78;
+  --secondary-pale: #c1e0e2;
+  --category-bg: #c1e0e2;
+  --category-ink: #21575f;
+  --timeline-bg: #c3d7ed;
+  --timeline-hover: #b5cbe6;
+  --timeline-border: #819fc2;
+  --timeline-ink: #223e64;
+  --dial-track: #a8c3dd;
+  --dial-ticks: #58799d;
+  --glass-line: rgba(79, 117, 160, .4);
+  --glass-highlight: rgba(232, 246, 255, .96);
+  --glass-base-ink: #173653;
+  --glass-smoke-rgb: 23, 47, 81;
+  --glass-base-muted: #244360;
+  --glass-base-tint: 182, 210, 239;
+  --glass-base-alpha: .28;
+  --glass-base-reading-alpha: .8;
+  --toast-bg: #173653;
+  --toast-ink: #e7f2ff;
+  --toast-action: #9fdae0;
+}
+
+:root[data-theme="forest"] {
+  --ground: #b8cdbd;
+  --surface: #d1e1cf;
+  --surface-rgb: 209, 225, 207;
+  --surface-alt: #c0d6c4;
+  --raised: #a8c5b2;
+  --text: #173b2f;
+  --muted: #315343;
+  --faint: #3b5d4d;
+  --border: #91af9b;
+  --control: #557d69;
+  --accent: #246548;
+  --accent-ink: #164e36;
+  --accent-pale: #afd0b7;
+  --accent-soft: #83b397;
+  --graphite: #214e3b;
+  --navy: #173e32;
+  --agenda-bg: #173e32;
+  --agenda-raised: #2d5545;
+  --agenda-border: #4d7560;
+  --agenda-text: #e5f2df;
+  --agenda-muted: #bbd3bb;
+  --secondary: #325d68;
+  --secondary-pale: #bbd4d2;
+  --category-bg: #bbd4d2;
+  --category-ink: #284f59;
+  --timeline-bg: #b3d0bb;
+  --timeline-hover: #a4c5af;
+  --timeline-border: #789c84;
+  --timeline-ink: #234c38;
+  --dial-track: #a1bfa6;
+  --dial-ticks: #557b61;
+  --glass-line: rgba(64, 110, 83, .42);
+  --glass-highlight: rgba(230, 247, 222, .94);
+  --glass-base-ink: #163a2b;
+  --glass-smoke-rgb: 23, 59, 47;
+  --glass-base-muted: #254934;
+  --glass-base-tint: 176, 210, 176;
+  --glass-base-alpha: .29;
+  --glass-base-reading-alpha: .82;
+  --toast-bg: #173e32;
+  --toast-ink: #e5f2df;
+  --toast-action: #aed4d1;
+}
+
+:root[data-theme="violet"] {
+  --ground: #c9bedb;
+  --surface: #e0d5ee;
+  --surface-rgb: 224, 213, 238;
+  --surface-alt: #cfc0e0;
+  --raised: #bba7d2;
+  --text: #382849;
+  --muted: #503963;
+  --faint: #5f4976;
+  --border: #b29ac9;
+  --control: #7c5d94;
+  --accent: #67418b;
+  --accent-ink: #51306f;
+  --accent-pale: #cbb3e0;
+  --accent-soft: #ad8ac9;
+  --graphite: #4b315f;
+  --navy: #35243f;
+  --agenda-bg: #35243f;
+  --agenda-raised: #513a5b;
+  --agenda-border: #745881;
+  --agenda-text: #f3e6f7;
+  --agenda-muted: #d4badf;
+  --secondary: #7e4167;
+  --secondary-pale: #dfc0d1;
+  --category-bg: #dfc0d1;
+  --category-ink: #62344f;
+  --timeline-bg: #cab4dd;
+  --timeline-hover: #bda3d3;
+  --timeline-border: #9b7ab8;
+  --timeline-ink: #4a305c;
+  --dial-track: #baa3ce;
+  --dial-ticks: #806194;
+  --glass-line: rgba(113, 80, 145, .4);
+  --glass-highlight: rgba(248, 229, 255, .95);
+  --glass-base-ink: #392447;
+  --glass-smoke-rgb: 56, 40, 73;
+  --glass-base-muted: #4a325c;
+  --glass-base-tint: 213, 187, 232;
+  --glass-base-alpha: .29;
+  --glass-base-reading-alpha: .82;
+  --toast-bg: #35243f;
+  --toast-ink: #f3e6f7;
+  --toast-action: #e5b9d6;
+}
+
+:root[data-theme="graphite"] {
+  color-scheme: dark;
+  --theme-tone: dark;
+  --ground: #242d31;
+  --surface: #354247;
+  --surface-rgb: 53, 66, 71;
+  --surface-alt: #2d3a3f;
+  --raised: #47585d;
+  --text: #e3eeeb;
+  --muted: #bdd4ce;
+  --faint: #b3cac4;
+  --border: #526a6d;
+  --control: #8ba5a4;
+  --accent: #a7d4c6;
+  --accent-ink: #c2e7d9;
+  --accent-pale: #405e58;
+  --accent-soft: #678d81;
+  --on-signal: #17372d;
+  --graphite: #c5d8d3;
+  --on-graphite: #223835;
+  --navy: #d1e2dc;
+  --agenda-bg: #1d2c2e;
+  --agenda-raised: #354b4b;
+  --agenda-border: #4b6663;
+  --agenda-text: #e3eeeb;
+  --agenda-muted: #b3cac4;
+  --secondary: #bbc9e0;
+  --secondary-pale: #414e66;
+  --category-bg: #414e66;
+  --category-ink: #d5e0f4;
+  --timeline-bg: #3f5955;
+  --timeline-hover: #4b6860;
+  --timeline-border: #72958c;
+  --timeline-ink: #e0f0e7;
+  --negative: #ffb0ae;
+  --negative-pale: #573536;
+  --warning: #f1c1a9;
+  --dial-track: #506764;
+  --dial-ticks: #90b1a7;
+  --glass-line: rgba(164, 197, 185, .4);
+  --glass-highlight: rgba(215, 241, 227, .42);
+  --glass-shadow: rgba(0, 10, 10, .3);
+  --glass-base-ink: #edf9f0;
+  --glass-smoke-rgb: 22, 47, 42;
+  --glass-base-muted: #dcece2;
+  --glass-base-tint: 22, 47, 42;
+  --glass-base-alpha: .33;
+  --glass-base-reading-alpha: .84;
+  --glass-base-type-shadow: 0 1px 2px rgba(0, 12, 9, .65);
+  --toast-bg: #d2e4dc;
+  --toast-ink: #223835;
+  --toast-action: #31534c;
+}
+
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --theme-tone: dark;
+  --ground: #10151e;
+  --surface: #192231;
+  --surface-rgb: 25, 34, 49;
+  --surface-alt: #1c2737;
+  --raised: #253247;
+  --text: #edf3fc;
+  --muted: #b0bdcf;
+  --faint: #a5b3c7;
+  --border: #344257;
+  --control: #73849d;
+  --accent: #83b8ff;
+  --accent-ink: #b0d2ff;
+  --accent-pale: #253d5d;
+  --accent-soft: #3c5b83;
+  --on-signal: #102239;
+  --navy: #b0d2ff;
+  --graphite: #e0e9f7;
+  --on-graphite: #162235;
+  --agenda-bg: #121b29;
+  --agenda-raised: #26364d;
+  --agenda-border: #36465e;
+  --agenda-text: #edf3fc;
+  --agenda-muted: #b4c1d5;
+  --category-bg: #2a3b53;
+  --category-ink: #c0d4ef;
+  --timeline-bg: #293e5b;
+  --timeline-hover: #344f71;
+  --timeline-border: #537299;
+  --timeline-ink: #dfebfc;
+  --negative: #ff9ca5;
+  --negative-pale: #402630;
+  --warning: #e7b1b9;
+  --dial-track: #334359;
+  --dial-ticks: #7a8ca6;
+  --glass-opacity: .88;
+  --glass-line: rgba(145, 174, 212, .33);
+  --glass-highlight: rgba(206, 226, 255, .40);
+  --glass-shadow: rgba(0, 7, 20, .28);
+  --glass-edge: rgba(123, 158, 206, .39);
+  --glass-cyan: rgba(107, 189, 214, .18);
+  --glass-violet: rgba(161, 153, 221, .20);
+  --toast-bg: #e0e9f7;
+  --toast-ink: #142237;
+  --toast-action: #2356a1;
+  --secondary: #c2b6e9;
+  --secondary-pale: #3a3452;
+  --glass-base-ink: #ffffff;
+  --glass-base-muted: #f0f5ff;
+  --glass-base-tint: 8, 17, 30;
+  --glass-base-alpha: .24;
+  --glass-base-reading-alpha: .78;
+  --glass-base-type-shadow: 0 1px 2px rgba(0, 6, 20, .65);
+}
+
+/* The wallpaper is the original image. Readability is handled locally, never
+   by a white or dark sheet over the whole picture. */
+html { background: var(--ground); color: var(--text); }
+body { position: relative; isolation: isolate; color: var(--text); background: var(--ground); }
+body::before { content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none; background: var(--wallpaper-image, none) center / cover no-repeat; opacity: 0; }
+body::after { content: none; display: none; opacity: 0; }
+body.wallpaper-on::before { opacity: 1; }
+body.custom-cover .cover-card > img { filter: none; }
+::selection { background: var(--accent-pale); color: var(--accent-ink); }
+* { scrollbar-color: var(--control) transparent; }
+
+/* Semantic colour coverage, including the older stylesheet's literal colours. */
+.studio-brand, .studio-date { border-color: var(--control); }
+.studio-nav, .studio-search, .studio-config, .studio-card, .panel,
+.input-search, dialog { background: var(--surface); color: var(--text); }
+.studio-nav, .studio-search, .studio-config { border-color: var(--border); }
+.studio-nav a { color: var(--muted); }
+.studio-nav a.active { background: var(--graphite); color: var(--on-graphite); }
+.studio-nav a:hover:not(.active), .studio-date:hover { background: var(--raised); }
+.studio-avatar { background: var(--raised); color: var(--text); }
+.studio-avatar > span { background: var(--signal); border-color: var(--ground); }
+.studio-heading p, .rhythm-label, .rhythm-label > span:last-child,
+.studio-metrics small, .activity-value > span, .bar-day, .activity-bottom,
+.focus-dial-content > small, .quick-copy-info > span, .quick-copy-foot,
+.quick-copy-foot .text-btn, .studio-calendar-foot, .page-footer,
+.snippet-card .snippet-content, .result-label, .form-note { color: var(--muted); }
+.page-footer { border-color: var(--border); }
+.rhythm-track { background: repeating-linear-gradient(135deg, var(--surface), var(--surface) 7px, var(--border) 7px, var(--border) 10px); }
+.rhythm-filled, .progress-fill { background: var(--signal); color: var(--on-signal); }
+.rhythm-rest { color: var(--text); text-shadow: none; }
+.progress-track { background: var(--border); }
+.activity-bar { background: var(--graphite); }
+.activity-bar-column.selected .activity-bar { background: var(--signal); }
+.activity-bar-column:hover .activity-bar { background: var(--accent-ink); }
+.circle-link, .focus-control { background: var(--surface); color: var(--text); }
+.circle-link:hover, .quick-copy-button:hover, .quick-copy-button.copied {
+  background: var(--signal); border-color: var(--signal); color: var(--on-signal);
+}
+.dial-ticks { stroke: var(--dial-ticks); }
+.dial-track { stroke: var(--dial-track); }
+#focusArc { stroke: var(--signal); }
+.focus-control.running { background: var(--signal); color: var(--on-signal); }
+.focus-control:hover { background: var(--raised); color: var(--text); }
+.focus-control.running:hover { background: var(--accent-ink); color: var(--on-signal); }
+.focus-length { background: var(--graphite); color: var(--on-graphite); }
+.focus-length:hover { background: var(--accent-ink); color: var(--on-signal); }
+
+/* Lists stay opaque, with the same readable dark agenda in every light theme. */
+.quick-copy { background: var(--surface); }
+.quick-copy-row, .snippet-card .snippet-actions { border-color: var(--border); }
+.quick-copy-symbol { background: var(--raised); color: var(--muted); }
+.quick-copy-info strong { color: var(--text); }
+.quick-copy-button { border-color: var(--control); color: var(--muted); }
+.studio-agenda { background: var(--agenda-bg); color: var(--agenda-text); }
+.agenda-top p, .agenda-total > span:first-child, .agenda-total small,
+.agenda-bottom > div, .agenda-date-nav .icon-btn,
+.studio-task-list .task-meta, .studio-task-list .task-row.done .task-meta,
+.studio-task-list .task-row.done .task-title, .studio-task-list .empty-state {
+  color: var(--agenda-muted);
+}
+.agenda-total > span:last-child, .agenda-date-button, .agenda-bottom a,
+.studio-task-list .task-title, .studio-task-list .empty-state h3 {
+  color: var(--agenda-text);
+}
+.agenda-top .circle-link, .studio-task-list .task-copy::before,
+.studio-task-list .empty-state .btn { background: var(--agenda-raised); color: var(--agenda-text); }
+.agenda-top .circle-link:hover { background: var(--signal); color: var(--on-signal); }
+.agenda-date-nav, .agenda-bottom a, .studio-task-list .task-row { border-color: var(--agenda-border); }
+.agenda-date-nav .icon-btn:hover { background: var(--agenda-raised); color: var(--agenda-text); }
+.studio-task-list .task-copy::after { border-color: var(--agenda-muted); }
+.studio-task-list { scrollbar-color: var(--agenda-muted) transparent; }
+.studio-task-list .task-check { border-color: var(--agenda-muted); background: transparent; }
+.studio-task-list .task-check.done { background: var(--agenda-text); border-color: var(--agenda-text); color: var(--agenda-bg); }
+.agenda-dot { background: var(--signal); }
+
+/* Calendar, clipboard and planner use the selected theme consistently. */
+.calendar-day.selected, .studio-calendar .calendar-day.selected {
+  background: var(--graphite); color: var(--on-graphite);
+}
+.calendar-day.today:not(.selected), .studio-calendar .calendar-day.today:not(.selected) { color: var(--accent-ink); }
+.calendar-day:hover:not(.selected) { background: var(--raised); }
+.calendar-day.outside { opacity: 1; color: var(--muted); }
+.task-row, .snippet-actions { border-color: var(--border); }
+.task-check { background: var(--surface); border-color: var(--control); }
+.task-check.done { background: var(--graphite); border-color: var(--graphite); color: var(--on-graphite); }
+.task-check:hover { border-color: var(--accent); }
+.category-tag, .category-tag[data-category] { background: var(--category-bg); color: var(--category-ink); }
+.meta-separator { color: var(--control); }
+.view-controls { background: var(--raised); }
+.view-controls button { color: var(--muted); }
+.view-controls button.active { background: var(--surface); color: var(--text); }
+.filter-chip.active { background: var(--graphite); border-color: var(--graphite); color: var(--on-graphite); }
+.filter-chip:hover:not(.active) { background: var(--surface); }
+.toolbar-right { flex-wrap: wrap; }
+.favorite-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  border-radius: 20px;
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+  white-space: nowrap;
+}
+.favorite-filter.active { background: var(--graphite); border-color: var(--graphite); color: var(--on-graphite); }
+.favorite-filter .icon { width: 14px; height: 14px; }
+.copy-btn { color: var(--category-ink); }
+.copy-btn:hover, .planner-toolbar .date-navigator > strong:hover { color: var(--accent-ink); }
+.snippet-card:hover { background: var(--surface); }
+.snippet-card.selected { background: var(--surface); }
+.snippet-card.selected::before { border: 1px solid var(--accent); }
+.planner-sidebar .panel, .calendar-bottom { background: var(--surface-alt); }
+.time-line { border-color: var(--border); }
+.timeline-task { background: var(--timeline-bg); border-color: var(--timeline-border); color: var(--timeline-ink); }
+.timeline-task:hover { background: var(--timeline-hover); }
+.timeline-task.done { background: var(--raised); color: var(--muted); }
+.week-event { background: var(--timeline-bg); color: var(--timeline-ink); }
+.week-event:hover { background: var(--timeline-hover); }
+.bulk-bar { border-color: var(--accent-soft); }
+
+/* Controls remain solid: glass is a material for a few panels, not a button style. */
+.btn { background: var(--surface); border-color: var(--control); color: var(--text); }
+.btn:hover { background: var(--raised); }
+.btn.primary { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
+.btn.primary:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: var(--on-signal); }
+.btn.quiet { background: transparent; border-color: var(--control); }
+.btn.danger { color: var(--negative); }
+.form-field input, .form-field textarea, .form-field select, .form-select {
+  background: var(--surface-alt); color: var(--text); border-color: var(--control);
+}
+.input-search input { color: var(--text); }
+.command-input input { color: var(--text); }
+.command-result:hover, .command-result:focus-visible { background: var(--raised); }
+.bulk-bar { background: var(--accent-pale); color: var(--text); }
+.week-column.today { background: var(--surface-alt); }
+.dialog-heading, .dialog-foot, .command-input, .command-footer { border-color: var(--border); }
+dialog::backdrop { background: rgba(7, 15, 29, .44); }
+.toast { background: var(--toast-bg); color: var(--toast-ink); }
+.toast button { color: var(--toast-action); }
+.empty-state > .icon { color: var(--muted); }
+.skip-link { background: var(--graphite); color: var(--on-graphite); }
+
+/* Glass without a photograph still belongs to the selected colour scheme.
+   With a wallpaper, the canvas supplies actual refraction beneath the content.
+   A narrow edge mask keeps the specular highlights away from the text. */
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: rgba(var(--surface-rgb), var(--glass-opacity));
+  border: 1px solid var(--glass-line);
+  box-shadow: inset 0 .5px 0 var(--glass-highlight), inset 0 -.5px 1px var(--glass-shadow), 0 3px 8px -6px rgba(3, 12, 26, .08);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before,
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: inherit;
+}
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before {
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(155deg, rgba(255, 255, 255, .15), transparent 32%, transparent 76%, rgba(255, 255, 255, .04));
+}
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::after {
+  inset: 0;
+  z-index: 3;
+  padding: 1.4px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  /* Both reflections live inside the thin perimeter mask. Their direction
+     follows the pointer; refraction and colour separation stay in the lens. */
+  background:
+    linear-gradient(var(--glass-light-angle, 135deg), rgba(255, 255, 255, .88) 0%, rgba(255, 255, 255, .20) 19%, transparent 37%, rgba(255, 255, 255, .08) 57%, rgba(255, 255, 255, .76) 79%, rgba(255, 255, 255, .20) 100%),
+    linear-gradient(calc(var(--glass-light-angle, 135deg) + 100deg), transparent 7%, var(--glass-line) 28%, transparent 46%, rgba(255, 255, 255, .38) 69%, transparent 92%);
+  background-blend-mode: screen, overlay;
+  box-shadow: inset 0 .5px 1px rgba(255, 255, 255, .48), inset 0 -.5px 1px var(--glass-shadow);
+}
+
+/* These direct children are normal-flow blocks in the current components.
+   Raising them leaves the timer's absolutely positioned inner label intact. */
+:is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) > :not(.glass-optics-canvas) {
+  position: relative;
+  z-index: 2;
+}
+.glass-optics-canvas {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.glass-optics-ready > .glass-optics-canvas { display: block; }
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) {
+  --glass-ink: var(--glass-base-ink);
+  --glass-muted: var(--glass-base-muted);
+  --glass-tint: var(--glass-base-tint);
+  --glass-tint-alpha: var(--glass-base-alpha);
+  --glass-reading-alpha: var(--glass-base-reading-alpha);
+  --glass-outline: rgba(248, 253, 255, .44);
+  --glass-type-shadow: 0 1px 2px rgba(248, 253, 255, .65);
+  background: rgba(var(--glass-tint), var(--glass-tint-alpha));
+  border-color: rgba(255, 255, 255, .32);
+  color: var(--glass-ink);
+  text-shadow: var(--glass-type-shadow);
+  box-shadow: inset 0 .5px 0 rgba(255, 255, 255, .58), inset 0 -.5px 0 rgba(255, 255, 255, .20), 0 12px 24px -16px rgba(4, 12, 25, .5);
+}
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda).glass-optics-ready {
+  background: transparent;
+}
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before {
+  background: linear-gradient(145deg, rgba(255, 255, 255, .16), transparent 36%, transparent 73%, rgba(255, 255, 255, .06)), rgba(var(--glass-tint), var(--glass-tint-alpha));
+}
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)[data-glass-tone="dark"] {
+  --glass-ink: #f4f9fb;
+  --glass-muted: #e1eced;
+  --glass-tint: var(--glass-smoke-rgb);
+  --glass-tint-alpha: .3;
+  --glass-outline: rgba(3, 12, 22, .4);
+  --glass-type-shadow: 0 1px 2px rgba(3, 12, 22, .8), 0 0 5px rgba(3, 12, 22, .3);
+  --glass-chart-signal: color-mix(in srgb, var(--accent) 42%, #d9edf1);
+  --dial-ticks: rgba(237, 246, 250, .72);
+  --dial-track: rgba(237, 246, 250, .24);
+}
+body.wallpaper-on .glass-optics-ready[data-glass-tone="dark"] #focusArc { stroke: var(--glass-chart-signal); }
+body.wallpaper-on .activity-card.glass-optics-ready[data-glass-tone="dark"] .activity-bar-column.selected .activity-bar { background: var(--glass-chart-signal); }
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(h2, h3, .activity-value, .month-heading, .calendar-day, .text-btn, .icon-btn) { color: var(--glass-ink); }
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(.activity-value > span, .activity-label, .bar-day, .activity-bottom, .focus-dial-content > small, .day-label, .studio-calendar-foot, .snippet-content) { color: var(--glass-muted); }
+body.wallpaper-on .activity-card .activity-bar { background: var(--glass-ink); box-shadow: 0 1px 2px rgba(255, 255, 255, .18); }
+body.wallpaper-on .activity-card .activity-bar-column.selected .activity-bar { background: var(--signal); }
+body.wallpaper-on .activity-card .activity-bar-column:hover .activity-bar { background: var(--accent-ink); }
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(button, a, .category-tag) { text-shadow: none; }
+body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(.icon-btn, .text-btn, .calendar-day:not(.selected)) { text-shadow: var(--glass-type-shadow); }
+body.wallpaper-on .activity-card .bar-day { text-shadow: var(--glass-type-shadow); }
+body.wallpaper-on .studio-calendar .calendar-day.selected { background: var(--graphite); color: var(--on-graphite); text-shadow: none; }
+body.wallpaper-on .studio-calendar .calendar-day:hover:not(.selected) { background: rgba(var(--glass-tint), .38); }
+body.wallpaper-on .studio-calendar .calendar-day.outside { color: var(--glass-muted); opacity: 1; }
+body.wallpaper-on .snippet-card .snippet-actions { border-color: rgba(var(--glass-tint), .38); }
+body.wallpaper-on .snippet-card .copy-btn { background: rgba(var(--surface-rgb), .92); color: var(--category-ink); padding: 5px 9px; border-radius: 16px; }
+.snippet-card:hover { border-color: var(--control); }
+.snippet-card.selected { border-color: var(--accent); }
+
+/* Reading stays directly on the lens. Locally chosen solid ink and a tight
+   shadow preserve the photograph without opaque rectangles under words. */
+body.wallpaper-on .glass-optics-ready .studio-card-head {
+  background: transparent;
+}
+body.wallpaper-on .glass-optics-ready .studio-card-head h2 {
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .studio-calendar.glass-optics-ready .mini-calendar {
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .studio-calendar.glass-optics-ready .mini-calendar::before {
+  content: none;
+}
+body.wallpaper-on .focus-card.glass-optics-ready .focus-dial-content {
+  isolation: isolate;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .focus-card.glass-optics-ready .focus-dial-content::before {
+  content: none;
+}
+body.wallpaper-on .focus-card.glass-optics-ready .focus-dial-content[data-glass-text-tone="dark"] {
+  --glass-ink: #f4f9fb;
+  --glass-muted: #e1eced;
+  --glass-type-shadow: 0 1px 2px rgba(3, 12, 22, .8), 0 0 5px rgba(3, 12, 22, .3);
+  color: var(--glass-ink);
+}
+body.wallpaper-on .focus-card.glass-optics-ready .focus-dial-content[data-glass-text-tone="light"] {
+  --glass-ink: var(--glass-base-ink);
+  --glass-muted: var(--glass-base-muted);
+  --glass-type-shadow: 0 1px 2px rgba(248, 253, 255, .65);
+  color: var(--glass-ink);
+}
+body.wallpaper-on .activity-card.glass-optics-ready :is(.activity-label, .activity-bottom) {
+  padding: 0;
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .activity-card.glass-optics-ready .activity-value {
+  padding: 0;
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .activity-card.glass-optics-ready .activity-bars::before {
+  content: none;
+}
+body.wallpaper-on .activity-card.glass-optics-ready .bar-day {
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .snippet-card.glass-optics-ready .snippet-reading {
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .snippet-card.glass-optics-ready .snippet-reading :is(h3, .snippet-content) {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Agenda text shares the continuous lens; controls keep their solid hit area. */
+:root:not([data-material="plain"]) body.wallpaper-on:not([data-glass-fallback="true"]) .studio-agenda {
+  --agenda-text: var(--glass-ink);
+  --agenda-muted: var(--glass-muted);
+  --agenda-raised: rgba(var(--glass-tint), .76);
+  --agenda-border: rgba(100, 123, 153, .32);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .agenda-heading {
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .studio-task-list {
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+  scrollbar-color: var(--glass-muted) transparent;
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready :is(.task-title, .task-meta, .agenda-top p, .agenda-total, .agenda-date-button, .icon-btn) {
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .task-check {
+  border-color: var(--glass-muted);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .task-check.done {
+  background: var(--graphite);
+  border-color: var(--graphite);
+  color: var(--on-graphite);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .agenda-bottom {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .agenda-bottom > div {
+  background: transparent;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .studio-agenda.glass-optics-ready .agenda-bottom a {
+  border-radius: 16px;
+  background: rgba(var(--surface-rgb), .94);
+  padding: 6px 10px;
+  color: var(--text);
+  text-shadow: none;
+}
+
+body.wallpaper-on .glass-optics-ready :is(h2, h3, .activity-value, .activity-label, .activity-bottom, .bar-day, .focus-dial-content, .month-heading, .day-label, .calendar-summary-copy, .snippet-reading, .agenda-heading, .studio-task-list, .agenda-bottom > div, .calendar-day:not(.selected)) {
+  -webkit-text-stroke: 0;
+  text-shadow: var(--glass-type-shadow);
+}
+body.wallpaper-on .glass-optics-ready :is(.circle-link, .focus-control, .focus-length, .task-check, .copy-btn, .category-tag, .calendar-day.selected, .agenda-bottom a) {
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+
+/* A graph owns separate rows for its bars and weekday labels. The highest
+   bar ends above the text instead of entering a shared decorative strip. */
+.activity-bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: stretch;
+}
+.activity-bar-column {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 18px;
+  row-gap: 8px;
+  align-items: stretch;
+  justify-items: center;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+.activity-bar-column .bar-space {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.activity-bar-column .activity-bar { max-height: 100%; }
+.activity-bar-column .bar-day { display: block; line-height: 18px; white-space: nowrap; }
+
+/* Wallpaper-facing type adapts to the image's local brightness. A tight text
+   shadow protects the glyphs; no viewport-size overlay mutes the photograph. */
+body.wallpaper-on {
+  --wallpaper-ink: #132032;
+  --wallpaper-muted: #25364b;
+  --wallpaper-type-shadow: 0 1px 2px rgba(255, 255, 255, .7);
+  --wallpaper-local-surface: rgba(252, 252, 252, .8);
+}
+body.wallpaper-on[data-wallpaper-tone="dark"] {
+  --wallpaper-ink: #ffffff;
+  --wallpaper-muted: #f0f5ff;
+  --wallpaper-type-shadow: 0 1px 3px rgba(0, 6, 20, .75);
+  --wallpaper-local-surface: rgba(13, 24, 39, .78);
+}
+body.wallpaper-on :is(.studio-brand, .studio-heading, .studio-overview, .page-heading, .breadcrumb-row, .result-label, .page-footer) {
+  color: var(--wallpaper-ink);
+  text-shadow: var(--wallpaper-type-shadow);
+}
+body.wallpaper-on :is(.studio-heading p, .rhythm-label, .rhythm-label > span:last-child, .studio-metrics small, .page-subtitle, .breadcrumb-row, .result-label, .page-footer) { color: var(--wallpaper-muted); }
+body.wallpaper-on .studio-metrics > div > :is(span, small) { color: var(--wallpaper-ink); }
+body.wallpaper-on [data-wallpaper-text-tone="light"] {
+  --wallpaper-ink: #132032;
+  --wallpaper-muted: #25364b;
+  --wallpaper-type-shadow: 0 1px 2px rgba(255, 255, 255, .55);
+  --wallpaper-local-surface: rgba(252, 252, 252, .84);
+  color: var(--wallpaper-ink);
+  text-shadow: var(--wallpaper-type-shadow);
+}
+body.wallpaper-on [data-wallpaper-text-tone="dark"] {
+  --wallpaper-ink: #ffffff;
+  --wallpaper-muted: #f0f5ff;
+  --wallpaper-type-shadow: 0 1px 2px rgba(0, 6, 20, .7);
+  --wallpaper-local-surface: rgba(13, 24, 39, .84);
+  color: var(--wallpaper-ink);
+  text-shadow: var(--wallpaper-type-shadow);
+}
+body.wallpaper-on .studio-date { background: var(--wallpaper-local-surface); color: var(--wallpaper-ink); border-color: rgba(133, 152, 179, .5); text-shadow: none; }
+body.wallpaper-on .studio-brand { border-color: rgba(133, 152, 179, .6); }
+body.wallpaper-on .section-filter { width: fit-content; padding: 3px; border-radius: 22px; background: rgba(var(--surface-rgb), .92); }
+body.wallpaper-on .heading-actions .btn.quiet { background: var(--surface); color: var(--text); border-color: var(--control); }
+body.wallpaper-on .result-label .text-btn { background: var(--surface); color: var(--text); border-radius: 16px; padding: 3px 8px; text-shadow: none; }
+body.wallpaper-on .breadcrumb :is(strong, .icon) { color: var(--wallpaper-ink); }
+body.wallpaper-on .breadcrumb { background: var(--wallpaper-local-surface); padding: 3px 7px; border-radius: 7px; text-shadow: none; }
+body.wallpaper-on .page-footer { border-color: rgba(133, 152, 179, .45); }
+
+:root[data-material="plain"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) {
+  background: var(--surface);
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  color: var(--text);
+  text-shadow: none;
+}
+:root[data-material="plain"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before,
+:root[data-material="plain"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::after { display: none; }
+:root[data-material="plain"] .glass-optics-canvas { display: none; }
+:root[data-material="plain"] body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(h2, h3, .activity-value, .month-heading, .calendar-day, .text-btn, .icon-btn) { color: var(--text); text-shadow: none; }
+:root[data-material="plain"] body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(.activity-value > span, .activity-label, .bar-day, .activity-bottom, .focus-dial-content > small, .day-label, .studio-calendar-foot, .snippet-content) { color: var(--muted); }
+:root[data-material="plain"] body.wallpaper-on .activity-card .activity-bar { background: var(--graphite); }
+:root[data-material="plain"] body.wallpaper-on .activity-card .activity-bar-column.selected .activity-bar { background: var(--signal); }
+:root[data-material="plain"] body.wallpaper-on .studio-calendar .calendar-day.selected { color: var(--on-graphite); }
+:root[data-material="plain"] .snippet-card.selected { border-color: var(--accent); }
+
+/* If the optical renderer is unavailable, keep a dependable solid reading
+   surface. The photograph and its independently sampled header stay visible. */
+:root[data-theme] body.wallpaper-on[data-glass-fallback="true"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) {
+  --glass-ink: var(--text);
+  --glass-muted: var(--muted);
+  --glass-type-shadow: none;
+  --signal: inherit;
+  --dial-ticks: inherit;
+  --dial-track: inherit;
+  background: var(--surface);
+  color: var(--text);
+  text-shadow: none;
+  border-color: var(--border);
+  box-shadow: inset 0 1px 0 var(--glass-highlight), 0 3px 8px -6px rgba(3, 12, 26, .08);
+}
+body.wallpaper-on[data-glass-fallback="true"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before,
+body.wallpaper-on[data-glass-fallback="true"] :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::after { display: none; }
+body[data-glass-fallback="true"] .glass-optics-canvas { display: none; }
+body.wallpaper-on[data-glass-fallback="true"] .activity-card .activity-bar { background: var(--graphite); }
+body.wallpaper-on[data-glass-fallback="true"] .activity-card .activity-bar-column.selected .activity-bar { background: var(--accent); }
+body.wallpaper-on[data-glass-fallback="true"] .snippet-card .snippet-actions { border-color: var(--border); }
+
+@media (prefers-reduced-transparency: reduce) {
+  body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda),
+  body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda).glass-optics-ready { background: var(--surface); color: var(--text); text-shadow: none; }
+  .glass-optics-canvas { display: none !important; }
+  body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda)::before { display: none; }
+  body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(h2, h3, .activity-value, .month-heading, .calendar-day, .text-btn, .icon-btn) { color: var(--text); text-shadow: none; }
+  body.wallpaper-on :is(.activity-card, .focus-card, .studio-calendar, .snippet-card, .studio-agenda) :is(.activity-value > span, .activity-label, .bar-day, .activity-bottom, .focus-dial-content > small, .day-label, .studio-calendar-foot, .snippet-content) { color: var(--muted); }
+  body.wallpaper-on .activity-card .activity-bar { background: var(--graphite); }
+  body.wallpaper-on .activity-card .activity-bar-column.selected .activity-bar { background: var(--accent); }
+  body.wallpaper-on .studio-calendar .calendar-day.selected { color: var(--on-graphite); }
+}
+@media (max-width: 740px) {
+  .studio-topbar .studio-search { background: var(--surface); }
+  .rhythm-label > span:last-child { color: var(--muted); }
+}
+
+/* The ordinary agenda keeps its familiar navy surface. These explicit resets
+   also protect it while the renderer is loading or has been switched off. */
+body:not(.wallpaper-on) .studio-agenda,
+:root[data-material="plain"] .studio-agenda,
+:root[data-theme] body.wallpaper-on[data-glass-fallback="true"] .studio-agenda {
+  background: var(--agenda-bg);
+  color: var(--agenda-text);
+  border-color: transparent;
+  box-shadow: none;
+  text-shadow: none;
+}
+body:not(.wallpaper-on) .studio-agenda::before,
+body:not(.wallpaper-on) .studio-agenda::after,
+:root[data-material="plain"] .studio-agenda::before,
+:root[data-material="plain"] .studio-agenda::after,
+body[data-glass-fallback="true"] .studio-agenda::before,
+body[data-glass-fallback="true"] .studio-agenda::after { display: none; }
+:root[data-material="plain"] body.wallpaper-on .studio-agenda :is(h2, .agenda-date-button, .agenda-total > span:last-child, .task-title, .agenda-bottom a),
+:root[data-theme] body.wallpaper-on[data-glass-fallback="true"] .studio-agenda :is(h2, .agenda-date-button, .agenda-total > span:last-child, .task-title, .agenda-bottom a) { color: var(--agenda-text); }
+:root[data-material="plain"] body.wallpaper-on .studio-agenda :is(.agenda-top p, .agenda-total > span:first-child, .agenda-total small, .agenda-bottom > div, .agenda-date-nav .icon-btn, .task-meta, .task-row.done .task-title),
+:root[data-theme] body.wallpaper-on[data-glass-fallback="true"] .studio-agenda :is(.agenda-top p, .agenda-total > span:first-child, .agenda-total small, .agenda-bottom > div, .agenda-date-nav .icon-btn, .task-meta, .task-row.done .task-title) { color: var(--agenda-muted); }
+
+@media (prefers-reduced-transparency: reduce) {
+  body.wallpaper-on .studio-agenda,
+  body.wallpaper-on .studio-agenda.glass-optics-ready {
+    --agenda-text: inherit;
+    --agenda-muted: inherit;
+    --agenda-raised: inherit;
+    --agenda-border: inherit;
+    background: var(--agenda-bg);
+    color: var(--agenda-text);
+    text-shadow: none;
+  }
+  body.wallpaper-on .studio-agenda::before,
+  body.wallpaper-on .studio-agenda::after { display: none; }
+  body.wallpaper-on .studio-agenda :is(h2, .agenda-date-button, .agenda-total > span:last-child, .task-title, .agenda-bottom a) { color: var(--agenda-text); }
+  body.wallpaper-on .studio-agenda :is(.agenda-top p, .agenda-total > span:first-child, .agenda-total small, .agenda-bottom > div, .agenda-date-nav .icon-btn, .task-meta, .task-row.done .task-title) { color: var(--agenda-muted); }
+  body.wallpaper-on .studio-agenda.glass-optics-ready :is(.agenda-heading, .studio-task-list, .agenda-bottom > div, .agenda-bottom a) { background: transparent; }
+  body.wallpaper-on .studio-agenda.glass-optics-ready .task-check.done { background: var(--agenda-text); border-color: var(--agenda-text); color: var(--agenda-bg); }
+}
