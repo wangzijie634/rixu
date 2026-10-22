@@ -151,6 +151,38 @@ export function layoutTasks(tasks, { startHour = 0, endHour = 24, minDisplayMinu
   });
 }
 
+/** Map a vertical offset inside the full-day timeline to minutes after midnight. */
+export function minuteAtOffset(offset, height) {
+  if (!Number.isFinite(offset) || !Number.isFinite(height) || height <= 0) return NaN;
+  return Math.min(1440, Math.max(0, offset / height * 1440));
+}
+
+/**
+ * Turn a pointer drag into a snapped time range. A drag shorter than
+ * clickThreshold minutes becomes a click block using clickDuration.
+ */
+export function timeRangeFromDrag(startMinute, endMinute, { step = 15, minimum = 15, clickThreshold = 5, clickDuration = 60 } = {}) {
+  if (!Number.isFinite(startMinute) || !Number.isFinite(endMinute)) throw new RangeError('拖动时间无效');
+  if (!Number.isInteger(step) || step <= 0 || step > 1440) throw new RangeError('对齐间隔无效');
+  if (!Number.isInteger(minimum) || minimum < 0 || minimum > 1440) throw new RangeError('最短时长无效');
+  if (!Number.isInteger(clickThreshold) || clickThreshold < 0) throw new RangeError('点击阈值无效');
+  if (!Number.isInteger(clickDuration) || clickDuration <= 0 || clickDuration > 1440) throw new RangeError('默认时长无效');
+  const clamp = value => Math.min(1440, Math.max(0, value));
+  const low = clamp(Math.min(startMinute, endMinute));
+  const high = clamp(Math.max(startMinute, endMinute));
+  // Pointer coordinates can land a hair below or above an exact step boundary.
+  const epsilon = 0.001;
+  if (high - low < clickThreshold) {
+    const start = Math.max(0, Math.min(1440 - clickDuration, Math.floor((low + epsilon) / step) * step));
+    return { startMinutes: start, endMinutes: start + clickDuration };
+  }
+  let start = Math.floor((low + epsilon) / step) * step;
+  let end = Math.ceil((high - epsilon) / step) * step;
+  if (end - start < minimum) end = Math.min(1440, start + minimum);
+  if (end - start < minimum) start = Math.max(0, end - minimum);
+  return { startMinutes: start, endMinutes: end };
+}
+
 const escapeICS = value => String(value ?? '').replace(/\\/g, '\\\\').replace(/\r\n|\r|\n/g, '\\n').replace(/;/g, '\\;').replace(/,/g, '\\,');
 
 /** RFC 5545 content lines fold after at most 75 UTF-8 octets. */

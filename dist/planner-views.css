@@ -1,0 +1,432 @@
+/* Full-day timeline and month overview. */
+
+.timeline-wrap {
+  overflow: visible;
+  max-height: none;
+}
+
+.timeline-wrap .timeline {
+  cursor: crosshair;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.timeline-task {
+  pointer-events: none;
+  z-index: 1;
+}
+
+.timeline-task.hovered {
+  background: var(--timeline-hover);
+}
+
+.timeline-task:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.timeline.is-dragging {
+  cursor: row-resize;
+}
+
+.timeline.is-dragging .timeline-task {
+  opacity: .55;
+}
+
+.time-line.last .time-label {
+  transform: translateY(-100%);
+}
+
+.drag-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.drag-hint .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.drag-selection {
+  position: absolute;
+  left: -2px;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 9px;
+  overflow: hidden;
+  border: 1px dashed var(--accent);
+  border-radius: 7px;
+  background: var(--accent-pale);
+  color: var(--accent-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+  pointer-events: none;
+}
+
+.drag-selection[hidden] {
+  display: none;
+}
+
+.drag-selection strong {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.drag-selection span {
+  font-size: 10px;
+  opacity: .8;
+}
+
+.month-panel {
+  overflow: hidden;
+}
+
+.month-panel-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 20px 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.month-panel-head h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.month-panel-head p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.month-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  min-width: 130px;
+}
+
+.month-score strong {
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.month-score > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.month-score .progress-track,
+.month-panel .progress-track {
+  width: 100%;
+  background: var(--raised);
+}
+
+.month-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 10px 12px 6px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-align: center;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0 12px 10px;
+}
+
+.month-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  min-height: 104px;
+  padding: 8px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+
+.month-cell:nth-child(7n + 1) {
+  border-left: 0;
+}
+
+.month-cell:nth-child(-n + 7) {
+  border-top: 0;
+}
+
+.month-cell:hover {
+  background: var(--surface-alt);
+}
+
+.month-cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.month-cell.outside {
+  color: var(--muted);
+  opacity: .55;
+}
+
+.month-cell.selected {
+  background: var(--accent-pale);
+  box-shadow: inset 0 0 0 1px var(--accent-soft);
+}
+
+.month-cell.today .month-day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-signal);
+  font-weight: 600;
+}
+
+.month-cell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  min-height: 23px;
+}
+
+.month-day {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.month-cell-count {
+  flex: none;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: var(--accent-pale);
+  color: var(--accent-ink);
+  font-size: 9px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.month-cell.complete .month-cell-count {
+  background: var(--accent);
+  color: var(--on-signal);
+}
+
+.month-cell-tasks {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.month-task {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--accent-ink);
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+
+.month-task > span:last-child {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.month-task-dot {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.month-task.done {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  opacity: .65;
+}
+
+.month-task.done .month-task-dot {
+  background: var(--muted);
+}
+
+.month-more {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.month-meter {
+  display: block;
+  flex: none;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--raised);
+}
+
+.month-meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width .2s ease;
+}
+
+.month-legend {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 20px 13px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.month-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.month-legend > span:last-child {
+  margin-left: auto;
+}
+
+.month-legend-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.month-legend-meter {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) 0 60%, var(--raised) 60%);
+}
+
+.month-best {
+  font-size: 11px !important;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .month-cell {
+    min-height: 88px;
+    padding: 6px;
+  }
+
+  .month-task {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 640px) {
+  .drag-hint {
+    display: none;
+  }
+
+  .month-panel-head {
+    align-items: flex-start;
+    padding: 16px 14px 12px;
+  }
+
+  .month-score {
+    min-width: 92px;
+  }
+
+  .month-score strong {
+    font-size: 20px;
+  }
+
+  .month-weekdays {
+    padding: 8px 8px 4px;
+  }
+
+  .month-grid {
+    padding: 0 8px 8px;
+  }
+
+  .month-cell {
+    min-height: 56px;
+    gap: 2px;
+    padding: 4px;
+  }
+
+  .month-cell-head {
+    min-height: 18px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .month-day {
+    font-size: 11px;
+  }
+
+  .month-cell-count {
+    padding: 1px 4px;
+    font-size: 8px;
+  }
+
+  .month-cell.today .month-day {
+    width: 19px;
+    height: 19px;
+  }
+
+  .month-cell-tasks,
+  .month-meter {
+    display: none;
+  }
+
+  .month-legend {
+    gap: 12px;
+    padding: 8px 12px 11px;
+  }
+
+  .month-legend > span:last-child {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .month-cell,
+  .month-meter > span {
+    transition: none;
+  }
+}

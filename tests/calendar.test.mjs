@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 // Import as ESM even before the app's package.json exists.
 const source = await readFile(new URL('../dist/lib/calendar.js', import.meta.url), 'utf8');
 const calendar = await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
-const { localDate, parseDate, addDays, addMonths, weekDates, monthCells, toMinutes, formatTime, validateTask, findConflicts, layoutTasks, createICalendar } = calendar;
+const { localDate, parseDate, addDays, addMonths, weekDates, monthCells, toMinutes, formatTime, validateTask, findConflicts, layoutTasks, createICalendar, minuteAtOffset, timeRangeFromDrag } = calendar;
 
 assert.equal(localDate(new Date(2026, 9, 21, 0, 5)), '2026-10-21');
 assert.equal(parseDate('2026-02-29'), null);
@@ -72,4 +72,23 @@ for (const line of output.split('\r\n')) assert.ok(Buffer.byteLength(line, 'utf8
 assert.equal(createICalendar([], { now: new Date('2026-10-21T00:00:00Z') }).includes('BEGIN:VEVENT'), false);
 assert.doesNotThrow(() => createICalendar([task('imported', '09:00', '10:00', { title: '长'.repeat(200), notes: '注'.repeat(10000) })]));
 assert.throws(() => createICalendar([task('bad', '10:00', '09:00')]), RangeError);
-console.log('calendar: 日期、导航、任务校验、冲突、重叠布局与 iCalendar 测试通过');
+
+assert.equal(minuteAtOffset(0, 1440), 0);
+assert.equal(minuteAtOffset(720, 1440), 720);
+assert.equal(minuteAtOffset(-20, 1440), 0);
+assert.equal(minuteAtOffset(2000, 1440), 1440);
+assert.ok(Number.isNaN(minuteAtOffset(10, 0)));
+
+assert.deepEqual(timeRangeFromDrag(14 * 60, 17 * 60), { startMinutes: 840, endMinutes: 1020 });
+assert.deepEqual(timeRangeFromDrag(839.9999952904593, 1020.0000000001), { startMinutes: 840, endMinutes: 1020 });
+assert.deepEqual(timeRangeFromDrag(845, 1010), { startMinutes: 840, endMinutes: 1020 });
+assert.deepEqual(timeRangeFromDrag(863, 863), { startMinutes: 855, endMinutes: 915 });
+assert.deepEqual(timeRangeFromDrag(0, 0), { startMinutes: 0, endMinutes: 60 });
+assert.deepEqual(timeRangeFromDrag(1435, 1435), { startMinutes: 1380, endMinutes: 1440 });
+assert.deepEqual(timeRangeFromDrag(1430, 1435), { startMinutes: 1425, endMinutes: 1440 });
+assert.deepEqual(timeRangeFromDrag(849, 855), { startMinutes: 840, endMinutes: 855 });
+assert.deepEqual(timeRangeFromDrag(840, 842, { clickThreshold: 0 }), { startMinutes: 840, endMinutes: 855 });
+assert.deepEqual(timeRangeFromDrag(-20, 2000), { startMinutes: 0, endMinutes: 1440 });
+assert.throws(() => timeRangeFromDrag(0, 60, { step: 0 }), RangeError);
+assert.throws(() => timeRangeFromDrag(NaN, 60), RangeError);
+console.log('calendar: 日期、导航、拖动选区、任务校验、冲突、重叠布局与 iCalendar 测试通过');
